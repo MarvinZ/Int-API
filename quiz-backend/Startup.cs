@@ -36,10 +36,9 @@ namespace quiz_backend
                 .AllowAnyMethod()
                 .AllowAnyHeader();
             }));
-            var conn = "Data Source=.;Initial Catalog=TestMF202;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            var conn = "Data Source=.;Initial Catalog=TestMF777;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddDbContext<QuizContext>(opt => opt.UseSqlServer(conn));
             services.AddDbContext<UserDbContext>(opt => opt.UseSqlServer(conn));
-            //services.AddDbContext<MaintenanceManContext>(opt => opt.UseSqlServer(conn));
 
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<UserDbContext>();
 
@@ -71,6 +70,20 @@ namespace quiz_backend
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, SampleData seeder)
         {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<QuizContext>();
+                context.Database.Migrate();
+            }
+
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<UserDbContext>();
+                context.Database.Migrate();
+            }
+
+
+
             app.UseAuthentication();
 
             if (env.IsDevelopment())
