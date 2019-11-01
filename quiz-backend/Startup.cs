@@ -36,7 +36,7 @@ namespace quiz_backend
                 .AllowAnyMethod()
                 .AllowAnyHeader();
             }));
-            var conn = "Data Source=.;Initial Catalog=TestMF777;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            var conn = "Data Source=.;Initial Catalog=RealTest101;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddDbContext<QuizContext>(opt => opt.UseSqlServer(conn));
             services.AddDbContext<UserDbContext>(opt => opt.UseSqlServer(conn));
 
